@@ -130,15 +130,15 @@ void drawModel()
 			glColor3f(1.0, 0.5, 0.0);
 			color = 1;
 		}
-		glVertex3f(-0.6, 0.8 + sinA, 0);
-		glVertex3f(-0.6, 0.4 + sinA, 0);
-		glVertex3f(-0.2, 0.4 + sinB, 0);
+		glVertex3f(-0.6, 0.8 + sinA, 1);
+		glVertex3f(-0.6, 0.4 + sinA, 1);
+		glVertex3f(-0.2, 0.4 + sinB, 1);
 
-		glVertex3f(0.2, 0.4 + sinB, 0);
+		glVertex3f(0.2, 0.4 + sinB, 1);
 
-		glVertex3f(0.6, 0.4 + sinC, 0);
+		glVertex3f(0.6, 0.4 + sinC, 1);
 
-		glVertex3f(0.6, 0.8 + sinC, 0);
+		glVertex3f(0.6, 0.8 + sinC, 1);
 
 		glEnd();
 
@@ -169,11 +169,11 @@ void drawModel()
 			color = 1;
 		}
 
-		glVertex3f(-0.2, 0.4 + sinB, 0.0);
-		glVertex3f(0.2, 0.4 + sinB, 0);
-		glVertex3f(0.2, -0.4 + sinB, 0);
+		glVertex3f(-0.2, 0.4 + sinB, 1.0);
+		glVertex3f(0.2, 0.4 + sinB, 1);
+		glVertex3f(0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.2, -0.4 + sinB, 0.0);
+		glVertex3f(-0.2, -0.4 + sinB, 1.0);
 		glEnd();
 
 		// ======
@@ -198,15 +198,15 @@ void drawModel()
 			glColor3f(1.0, 0.5, 0.0);
 			color = 1;
 		}
-		glVertex3f(0.6, -0.8 + sinC, 0);
-		glVertex3f(0.6, -0.4 + sinC, 0);
-		glVertex3f(0.2, -0.4 + sinB, 0);
+		glVertex3f(0.6, -0.8 + sinC, 1);
+		glVertex3f(0.6, -0.4 + sinC, 1);
+		glVertex3f(0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.2, -0.4 + sinB, 0);
+		glVertex3f(-0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.6, -0.4 + sinA, 0);
+		glVertex3f(-0.6, -0.4 + sinA, 1);
 
-		glVertex3f(-0.6, -0.8 + sinA, 0);
+		glVertex3f(-0.6, -0.8 + sinA, 1);
 		glEnd();
 
 
@@ -238,15 +238,15 @@ void drawModel()
 			glColor3f(1.0, 0.5, 0.0);
 			color = 1;
 		}
-		glVertex3f(-0.6, 0.8 + sinA, 0);
-		glVertex3f(-0.6, 0.4 + sinA, 0);
-		glVertex3f(-0.2, 0.4 + sinB, 0);
+		glVertex3f(-0.6, 0.8 + sinA, 1);
+		glVertex3f(-0.6, 0.4 + sinA, 1);
+		glVertex3f(-0.2, 0.4 + sinB, 1);
 
-		glVertex3f(0.2, 0.4 + sinB, 0);
+		glVertex3f(0.2, 0.4 + sinB, 1);
 
-		glVertex3f(0.6, 0.4 + sinC, 0);
+		glVertex3f(0.6, 0.4 + sinC, 1);
 
-		glVertex3f(0.6, 0.8 + sinC, 0);
+		glVertex3f(0.6, 0.8 + sinC, 1);
 		glEnd();
 
 		/*
@@ -275,11 +275,11 @@ void drawModel()
 			glColor3f(1.0, 0.5, 0.0);
 			color = 1;
 		}
-		glVertex3f(-0.2, 0.4 + sinB, 0.0);
-		glVertex3f(0.2, 0.4 + sinB, 0);
-		glVertex3f(0.2, -0.4 + sinB, 0);
+		glVertex3f(-0.2, 0.4 + sinB, 1.0);
+		glVertex3f(0.2, 0.4 + sinB, 1);
+		glVertex3f(0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.2, -0.4 + sinB, 0.0);
+		glVertex3f(-0.2, -0.4 + sinB, 1.0);
 		glEnd();
 
 
@@ -305,15 +305,15 @@ void drawModel()
 			glColor3f(1.0, 0.5, 0.0);
 			color = 1;
 		}
-		glVertex3f(0.6, -0.8 + sinC, 0);
-		glVertex3f(0.6, -0.4 + sinC, 0);
-		glVertex3f(0.2, -0.4 + sinB, 0);
+		glVertex3f(0.6, -0.8 + sinC, 1);
+		glVertex3f(0.6, -0.4 + sinC, 1);
+		glVertex3f(0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.2, -0.4 + sinB, 0);
+		glVertex3f(-0.2, -0.4 + sinB, 1);
 
-		glVertex3f(-0.6, -0.4 + sinA, 0);
+		glVertex3f(-0.6, -0.4 + sinA, 1);
 
-		glVertex3f(-0.6, -0.8 + sinA, 0);
+		glVertex3f(-0.6, -0.8 + sinA, 1);
 		glEnd();
 	}
 	glPopMatrix();
