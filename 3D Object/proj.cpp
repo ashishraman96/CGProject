@@ -16,7 +16,7 @@ void instructions() {
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
 	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
-	//cout << " z/x: Zoom In / Zoom Out" << endl;
+	cout << "v/b: Zoom In / Zoom Out" << endl;
 	//cout << " n : Change Color of the 'I'" << endl;
 	//cout << " o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
@@ -36,6 +36,7 @@ void triangle(int a, int b, int c) {
 }
 
 void colorcube(void) {
+	glScalef(zoomer, zoomer, zoomer);
 	triangle(0,2,3);
 	triangle(0,2,1);
 	triangle(3,0,1);
@@ -144,6 +145,18 @@ void keyboard(unsigned char btn, int x, int y) {
 			cout << endl << "FPS View ON!" << endl;
 		else
 			cout << endl << "FPS View OFF!" << endl;
+	}
+
+	if (btn == 'v' || btn == 'V') {
+		cout << "Zooming In!" << endl;
+		zoomer += 0.01;
+	}
+	if (btn == 'b' || btn == 'B') {
+		cout << "Zooming Out!" << endl;
+		if (zoomer <= 0)
+			zoomer = 0.0;
+		else
+			zoomer -= 0.01;
 	}
 
 	if(btn == 27)

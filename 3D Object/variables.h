@@ -9,6 +9,7 @@ static GLfloat theta[] = {0.0,0.0,0.0};
 static GLint axis = 1;
 
 float speed = 0.0;
+float zoomer = 1.0;
 
 bool rotation = false; //to check if rotation has started or not
 bool fpsMode = false;
