@@ -12,11 +12,14 @@ float asp_rat;
 float speed = 0.0;
 float zoomer = 1.0;
 int toggle = 0;
+float whooshFactor = 10;
 
 bool rotation = false; //to check if rotation has started or not
 bool fpsMode = false;
 bool inAppDisplay = false;
 bool discoMode = false;
+bool dancing = false;
+bool whoosh = false;
 
 //Variables used for FPS and FPS calculation
 float fps;
@@ -25,7 +28,10 @@ int currentTime = 0;
 int previousTime = 0;
 
 void instructions(void);
+void timer(int value);
+void timer2(int value);
 void triangle(int a, int b, int c);
+void rotate();
 void colorcube(void);
 void display(void);
 void spincube();

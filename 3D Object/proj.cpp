@@ -1,6 +1,8 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <GL/glut.h>
 #include <string.h>
+#include <math.h>
 #include "variables.h"
 
 #include<iostream>
@@ -11,18 +13,35 @@ void instructions() {
 	cout << "--------------------------------------------------------------------------------" << endl;
 	//cout << " m : Mesh-View ON/OFF" << endl;
 	cout << "F/f : FPS Display ON/OFF" << endl;
-	//cout << " -space- : Dance ON/OFF" << endl;
-	//cout << " w : Fly 'I' ON/OFF" << endl;
+	cout << "-space- : Dance ON/OFF" << endl;
+	cout << "W/w : Fly 'I' ON/OFF" << endl;
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
 	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
-	//cout << " n : Change Color of the 'I'" << endl;
 	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
 	cout << " Esc: Quit" << endl;
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
+}
+
+float timeElapsed = 0;
+void timer(int value) {
+	if (dancing) {
+		timeElapsed += 0.2;
+		glutPostRedisplay();
+		glutTimerFunc(50, timer, 0);
+	}
+}
+
+float timeElapsed2 = 0;
+void timer2(int value) {
+	if (whoosh) {
+		timeElapsed2 += 0.05;
+		glutPostRedisplay();
+		glutTimerFunc(10, timer2, 0);
+	}
 }
 
 void triangle(int a, int b, int c) {
@@ -46,16 +65,59 @@ void colorcube(void) {
 
 void display(void) {
 
-	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	 glLoadIdentity();
-	 checkForText();
-	 glRotatef(theta[0], 1.0, 0.0, 0.0);
-	 glRotatef(theta[1], 0.0, 1.0, 0.0);
-	 glRotatef(theta[2], 0.0, 0.0, 1.0);
+	//Used to make the Model 'Wiggle'
+	float sinA, sinB, sinC;
+	//Used for the Model the 'Fly'
+	float sinX, sinY;
 
-	 colorcube();
+	if (whoosh) {
+		sinX = sin(timeElapsed2 - 1.5);
+		sinY = sin(timeElapsed2 + 1.5);
+	}
+
+	if (dancing) {
+		sinA = 0.2 * sin(timeElapsed - 1.5);
+		sinB = 0.2 * sin(timeElapsed - 0.5);
+		sinC = 0.2 * sin(timeElapsed + 0.5);
+	}
+	else {
+		sinA = 0;
+		sinB = 0;
+		sinC = 0;
+	}
+
+	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	 glEnable(GL_BLEND);
+	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	 glMatrixMode(GL_MODELVIEW);
+	 glLoadIdentity();
+	 glPushMatrix();
+	 if (whoosh) {
+ 		if (zoomer > 1) {
+ 			glTranslatef(sinX, sinY, zoomer);
+ 		}
+ 		else if (zoomer < 1) {
+ 			glTranslatef(sinX, sinY, -zoomer);
+ 		}
+ 		else
+ 			glTranslatef(sinX, sinY, 0);
+ 		glPushMatrix();
+	}
+	rotate();
+	glPopMatrix();
+	if (whoosh)
+		glPopMatrix();
+	 checkForText();
 	 glFlush();
 	 glutSwapBuffers();
+}
+
+void rotate() {
+	glRotatef(theta[0], 1.0, 0.0, 0.0);
+	glRotatef(theta[1], 0.0, 1.0, 0.0);
+	glRotatef(theta[2], 0.0, 0.0, 1.0);
+
+	colorcube();
 }
 
 void spinCube() {
@@ -117,32 +179,32 @@ void drawText(float x, float y, char *text) {
 
 void checkForText() {
 	if (inAppDisplay) {
-		/*if (dancing) {
+		if (dancing) {
 			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.9 *asp_rat, "Dancing-Mode : ON");
 		}
 		else {
 			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.9 * asp_rat, "Dancing-Mode : OFF");
-		}*/
+		}
 
-		/*if (disco_mode)	{
+		if (discoMode)	{
 			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : ON");
 		}
 		else {
 			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : OFF");
-		}*/
+		}
 
-		/*if (whoosh)	{
+		if (whoosh)	{
 			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : ON");
 		}
 		else {
 			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : OFF");
-		}*/
+		}
 
 		/*if (meshview) {
 			drawText(-2 * asp_rat, 1.6 * asp_rat, "                                       ");
@@ -287,6 +349,26 @@ void keyboard(unsigned char btn, int x, int y) {
 			cout << endl << "Disco - Mode OFF!" << endl;
 
 		updateDisco(0);
+	}
+
+	if (btn == ' ') {
+		dancing = !dancing;
+		timeElapsed = 0;
+		if(dancing)
+			cout << endl << "Dancing ON!" << endl;
+		else
+			cout << endl << "Dancing OFF!" << endl;
+		timer(0);
+	}
+
+	if (btn == 'w' || btn == 'W') {
+		whoosh = !whoosh;
+		timeElapsed2 = 0;
+		if (whoosh)
+			cout << endl << "Fly Mode ON!" << endl;
+		else
+			cout << endl << "Fly Mode OFF!" << endl;
+		timer2(0);
 	}
 
 	if(btn == 27)
