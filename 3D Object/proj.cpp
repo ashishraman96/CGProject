@@ -9,7 +9,7 @@ void instructions() {
 	cout << "                             *****INSTRUCTIONS*****                      " << endl;
 	cout << "--------------------------------------------------------------------------------" << endl;
 	//cout << " m : Mesh-View ON/OFF" << endl;
-	//cout << " f : FPS Display ON/OFF" << endl;
+	cout << "F/f : FPS Display ON/OFF" << endl;
 	//cout << " -space- : Dance ON/OFF" << endl;
 	//cout << " w : Fly 'I' ON/OFF" << endl;
 	//cout << " d : Disco Mode ON/OFF" << endl;
@@ -42,8 +42,6 @@ void colorcube(void) {
 	triangle(2,3,1);
 }
 
-
-
 void display(void) {
 
 	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -67,6 +65,34 @@ void spinCube() {
 	glutPostRedisplay();
 }
 
+void updatedisplay(int value) {
+	//To update the display repeatedly
+	glutPostRedisplay();
+	frameCount++;
+	//  Get the number of milliseconds since glutInit called
+	//  (or first call to glutGet(GLUT ELAPSED TIME)).
+	currentTime = glutGet(GLUT_ELAPSED_TIME);
+	//  Calculate time passed
+	int timeInterval = currentTime - previousTime;
+	if (timeInterval > 1000)
+	{
+		//  calculate the number of frames per second
+		fps = frameCount / (timeInterval / 1000.0f);
+		//  Set time
+		previousTime = currentTime;
+		//  Reset frame count
+		frameCount = 0;
+	}
+	glutTimerFunc(10, updatedisplay, 0);
+}
+
+void displayFPS(int value) {
+	if (fpsMode)
+		cout << "FPS : " << fps << endl;
+
+	glutTimerFunc(1000, displayFPS, 0);
+}
+
 
 
 void keyboard(unsigned char btn, int x, int y) {
@@ -74,28 +100,51 @@ void keyboard(unsigned char btn, int x, int y) {
 	if(btn == 'r' || btn == 'R') {
 		if(rotation) {
 			speed = 0.0;
-			rotation = false;
+			rotation = !rotation;
+			cout << "Stopped Rotation!" << endl;
 		}
 		else {
 			speed = 1.0;
-			rotation = true;
+			rotation = !rotation;
+			cout << "Started Rotation" << endl;
 		}
 	}
 
-	if(btn == '1')
-		if(rotation)
+	if(btn == '1') {
+		if(rotation) {
 			speed += 1.0;
+			cout << "Speed Increased" << endl;
+		}
+	}
 
-	if(btn == '2')
-		if(rotation)
+
+	if(btn == '2') {
+		if(rotation) {
 			speed -= 1.0;
+			cout << "Speed Decreased" << endl;
+		}
+	}
 
-	if(btn == 'x' || btn =='X')
+	if(btn == 'x' || btn =='X') {
 		axis = 0;
-	if(btn == 'y' || btn =='Y')
+		cout << "X-axis rotation!" <<endl;
+	}
+	if(btn == 'y' || btn =='Y') {
 		axis = 1;
-	if(btn == 'z' || btn =='Z')
+		cout << "Y-axis rotation!" <<endl;
+	}
+	if(btn == 'z' || btn =='Z') {
 		axis = 2;
+		cout << "Z-axis rotation!" <<endl;
+	}
+
+	if (btn == 'f' || btn == 'F') {
+		fpsMode = !fpsMode;
+		if (fpsMode)
+			cout << endl << "FPS View ON!" << endl;
+		else
+			cout << endl << "FPS View OFF!" << endl;
+	}
 
 	if(btn == 27)
 		exit(0);
@@ -124,6 +173,9 @@ int main(int argc, char **argv) {
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(WINDOW_HEIGHT, WINDOW_WIDTH);
   glutCreateWindow(WINDOW_TITLE);
+	glClearColor(1.0,1.0,1.0,1.0);
+	updatedisplay(0);
+	displayFPS(0);
   glutReshapeFunc(myReshape);
   glutDisplayFunc(display);
 	glutIdleFunc(spinCube);
