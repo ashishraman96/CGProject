@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <GL/glut.h>
+#include <string.h>
 #include "variables.h"
 
 #include<iostream>
@@ -18,7 +19,7 @@ void instructions() {
 	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
 	//cout << " n : Change Color of the 'I'" << endl;
-	//cout << " o : Display In-App Function States" << endl;
+	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
 	cout << " Esc: Quit" << endl;
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
@@ -47,6 +48,7 @@ void display(void) {
 
 	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 glLoadIdentity();
+	 checkForText();
 	 glRotatef(theta[0], 1.0, 0.0, 0.0);
 	 glRotatef(theta[1], 0.0, 1.0, 0.0);
 	 glRotatef(theta[2], 0.0, 0.0, 1.0);
@@ -94,7 +96,84 @@ void displayFPS(int value) {
 	glutTimerFunc(1000, displayFPS, 0);
 }
 
+void drawText(float x, float y, char *text) {
+	int length = strlen(text);		//Grabs the length of the text
 
+	glColor3f(0, 0, 0);
+
+	//Position to draw the text
+	glRasterPos2f(x, y);
+
+	glDisable(GL_TEXTURE);
+	glDisable(GL_TEXTURE_2D);
+	for (int i = 0; i < length; i++)
+	{
+		//2nd parameter is sent as integers as the function needs the ASCII codes
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
+	}
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE);
+}
+
+void checkForText() {
+	if (inAppDisplay) {
+		/*if (dancing) {
+			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.9 *asp_rat, "Dancing-Mode : ON");
+		}
+		else {
+			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.9 * asp_rat, "Dancing-Mode : OFF");
+		}*/
+
+		/*if (disco_mode)	{
+			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : ON");
+		}
+		else {
+			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : OFF");
+		}*/
+
+		/*if (whoosh)	{
+			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : ON");
+		}
+		else {
+			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : OFF");
+		}*/
+
+		/*if (meshview) {
+			drawText(-2 * asp_rat, 1.6 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.6 * asp_rat, "Meshview : ON");
+		}
+		else {
+			drawText(-2 * asp_rat, 1.6 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.6 * asp_rat, "Meshview : OFF");
+		}*/
+
+		if (rotation) {
+			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.5 * asp_rat, "Rotation-Mode : ON");
+			//drawText(-2 * asp_rat, 1.5 * asp_rat, "Speed: ")
+		}
+		else {
+			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.5 * asp_rat, "Rotation-Mode : OFF");
+		}
+
+		if (fpsMode) {
+			drawText(-2 * asp_rat, 1.4 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : ON (Check Cosole)");
+		}
+		else
+		{
+			drawText(-2 * asp_rat, 1.4 * asp_rat, "                                       ");
+			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : OFF");
+		}
+	}
+}
 
 void keyboard(unsigned char btn, int x, int y) {
 
@@ -127,16 +206,28 @@ void keyboard(unsigned char btn, int x, int y) {
 	}
 
 	if(btn == 'x' || btn =='X') {
-		axis = 0;
-		cout << "X-axis rotation!" <<endl;
+		if(rotation) {
+			axis = 1;
+			cout << "X-axis rotation!" <<endl;
+		}
+		else
+			cout << "Please begin rotation first!";
 	}
 	if(btn == 'y' || btn =='Y') {
-		axis = 1;
-		cout << "Y-axis rotation!" <<endl;
+		if(rotation) {
+			axis = 0;
+			cout << "Y-axis rotation!" <<endl;
+		}
+		else
+			cout << "Please begin rotation first!";
 	}
 	if(btn == 'z' || btn =='Z') {
-		axis = 2;
-		cout << "Z-axis rotation!" <<endl;
+		if(rotation) {
+			axis = 2;
+			cout << "Z-axis rotation!" <<endl;
+		}
+		else
+			cout << "Please begin rotation first!";
 	}
 
 	if (btn == 'f' || btn == 'F') {
@@ -159,6 +250,14 @@ void keyboard(unsigned char btn, int x, int y) {
 			zoomer -= 0.01;
 	}
 
+	if (btn == 'o' || btn == 'O') {
+		inAppDisplay = !inAppDisplay;
+		if (inAppDisplay)
+			cout << "In App Text Display : ON!" << endl;
+		else
+			cout << "In App Text Display : OFF!" << endl;
+	}
+
 	if(btn == 27)
 		exit(0);
 
@@ -172,10 +271,14 @@ void myReshape(int w, int h) {
 	glViewport(0, 0, w, h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  if (w <= h)
+  if (w <= h) {
   	glOrtho(-2.0, 2.0, -2.0 * (GLfloat) h / (GLfloat) w, 2.0 * (GLfloat) h / (GLfloat) w, -10.0, 10.0);
-  else
+		asp_rat = (float)w/(float)h;
+	}
+  else {
     glOrtho(-2.0 * (GLfloat) w / (GLfloat) h, 2.0 * (GLfloat) w / (GLfloat) h, -2.0, 2.0, -10.0, 10.0);
+		asp_rat = (float)h/(float)w;
+	}
 
 	glMatrixMode(GL_MODELVIEW);
 }
