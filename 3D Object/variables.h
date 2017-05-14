@@ -7,7 +7,7 @@ GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}
 
 float speed = 0.0;
 
-bool flag = false; //to check if rotation has started or not
+bool rotation = false; //to check if rotation has started or not
 
 static GLfloat theta[] = {0.0,0.0,0.0};
 static GLint axis = 1;
