@@ -6,6 +6,9 @@ GLfloat vertices[][3] = {{0.0,-1.0,-1.0}, {0.0,0.75,0.0}, {-1.0,-1.0,1.0}, {1.0,
 GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
 
 float speed = 0.0;
+
+bool flag = false; //to check if rotation has started or not
+
 void triangle(int a, int b, int c) {
 	glBegin(GL_POLYGON);
 	glColor3fv(colors[a]);
@@ -43,14 +46,27 @@ void display(void) {
 void spinCube() {
 
 	theta[axis] += speed;
-	if( theta[axis] > 360.0 ) theta[axis] -= 360.0;
-	/* display(); */
+	if( theta[axis] > 360.0 )
+		theta[axis] -= 360.0;
+	if(theta[axis] <= 0.0)
+		theta[axis] = 0.0;
 	glutPostRedisplay();
 }
 
 
 
 void keybaord(unsigned char btn, int x, int y) {
+
+	if(btn == '9') {
+		speed += 1.0;
+		flag = true;
+	}
+
+	if(btn == '0') {
+		speed = 0.0;
+		flag = false;
+	}
+
 	if(btn == 'x')
 		axis = 0;
 	if(btn == 'y')
@@ -59,7 +75,8 @@ void keybaord(unsigned char btn, int x, int y) {
 		axis = 2;
 
 	if(btn == 'i')
-		speed += 1.0;
+		if(flag == true)
+			speed += 1.0;
 
 	if(btn == 'o')
 		speed -= 1.0;
