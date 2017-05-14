@@ -13,7 +13,7 @@ void instructions() {
 	cout << "F/f : FPS Display ON/OFF" << endl;
 	//cout << " -space- : Dance ON/OFF" << endl;
 	//cout << " w : Fly 'I' ON/OFF" << endl;
-	//cout << " d : Disco Mode ON/OFF" << endl;
+	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
 	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
@@ -156,7 +156,6 @@ void checkForText() {
 		if (rotation) {
 			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
 			drawText(-2 * asp_rat, 1.5 * asp_rat, "Rotation-Mode : ON");
-			//drawText(-2 * asp_rat, 1.5 * asp_rat, "Speed: ")
 		}
 		else {
 			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
@@ -165,7 +164,7 @@ void checkForText() {
 
 		if (fpsMode) {
 			drawText(-2 * asp_rat, 1.4 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : ON (Check Cosole)");
+			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : ON (Check Console)");
 		}
 		else
 		{
@@ -173,6 +172,27 @@ void checkForText() {
 			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : OFF");
 		}
 	}
+}
+
+void updateDisco(int value) {
+	toggle++;
+	if (discoMode) {
+		if (toggle == 1)
+			glClearColor(213.0, 0.0, 0.0, 0.0);
+		else if (toggle == 2)
+			glClearColor(0.0, 255.0, 0.0, 0.0);
+		else if (toggle == 3)
+			glClearColor(0.6, 0.2, 0.7, 0.0);
+		else {
+			glClearColor(0.0, 61.0, 255.0, 0.0);
+			toggle = 0;
+		}
+	//cout << toggle << endl;
+		glutPostRedisplay();
+		glutTimerFunc(250, updateDisco, 0);
+	}
+	else
+		glClearColor(1, 1, 1, 1);
 }
 
 void keyboard(unsigned char btn, int x, int y) {
@@ -258,6 +278,17 @@ void keyboard(unsigned char btn, int x, int y) {
 			cout << "In App Text Display : OFF!" << endl;
 	}
 
+	if (btn == 'd' || btn == 'D') {
+		discoMode = !discoMode;
+		toggle = 0;
+		if (discoMode)
+			cout << endl << "Disco - Mode ON!" << endl;
+		else
+			cout << endl << "Disco - Mode OFF!" << endl;
+
+		updateDisco(0);
+	}
+
 	if(btn == 27)
 		exit(0);
 
@@ -296,6 +327,7 @@ int main(int argc, char **argv) {
   glutDisplayFunc(display);
 	glutIdleFunc(spinCube);
 	glutKeyboardFunc(keyboard);
+	glutTimerFunc(500, updateDisco, 0);
 	glEnable(GL_DEPTH_TEST); /* Enable hidden--surface--removal */
   glutMainLoop();
   return 0;
