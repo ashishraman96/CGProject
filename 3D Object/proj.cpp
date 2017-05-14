@@ -8,13 +8,15 @@
 #include<iostream>
 using namespace std;
 
+float c = 0.0;
+
 void instructions() {
 	cout << "                             *****INSTRUCTIONS*****                      " << endl;
 	cout << "--------------------------------------------------------------------------------" << endl;
 	//cout << " m : Mesh-View ON/OFF" << endl;
 	cout << "F/f : FPS Display ON/OFF" << endl;
 	cout << "-space- : Dance ON/OFF" << endl;
-	cout << "W/w : Fly 'I' ON/OFF" << endl;
+	cout << "W/w : Fly ON/OFF" << endl;
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
@@ -63,6 +65,60 @@ void colorcube(void) {
 	triangle(2,3,1);
 }
 
+void spinCube() {
+
+	theta[axis] += speed;
+	if( theta[axis] > 360.0 )
+		theta[axis] -= 360.0;
+	if(theta[axis] <= 0.0)
+		theta[axis] = 0.0;
+	glutPostRedisplay();
+}
+
+void discoitems() {
+	glPushMatrix();
+	glTranslatef(-0.7,0.7,0.1);
+	glScalef(0.2,0.2,0.2);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.5,0.3,-0.1);
+	glScalef(-0.27,-0.27,-0.27);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1.1,0.9,0.5);
+	glScalef(-0.11,-0.11,-0.11);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(0.91,-0.3,0.14);
+	glScalef(0.13,0.13,0.13);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(1.7,1.3,-0.1);
+	glScalef(-0.2,-0.2,-0.2);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(1.5,0.9,0.4);
+	glScalef(0.11,0.11,0.11);
+	rotate();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(1.5,-0.9,0.4);
+	glScalef(0.19,0.19,0.19);
+	rotate();
+	glPopMatrix();
+}
+
 void display(void) {
 
 	//Used to make the Model 'Wiggle'
@@ -101,12 +157,15 @@ void display(void) {
  		}
  		else
  			glTranslatef(sinX, sinY, 0);
- 		glPushMatrix();
+ 		//glPushMatrix();
 	}
 	rotate();
 	glPopMatrix();
 	if (whoosh)
 		glPopMatrix();
+	if(discoMode) {
+		discoitems();
+	}
 	 checkForText();
 	 glFlush();
 	 glutSwapBuffers();
@@ -120,15 +179,6 @@ void rotate() {
 	colorcube();
 }
 
-void spinCube() {
-
-	theta[axis] += speed;
-	if( theta[axis] > 360.0 )
-		theta[axis] -= 360.0;
-	if(theta[axis] <= 0.0)
-		theta[axis] = 0.0;
-	glutPostRedisplay();
-}
 
 void updatedisplay(int value) {
 	//To update the display repeatedly
@@ -405,9 +455,9 @@ int main(int argc, char **argv) {
 	glClearColor(1.0,1.0,1.0,1.0);
 	updatedisplay(0);
 	displayFPS(0);
+	glutIdleFunc(spinCube);
   glutReshapeFunc(myReshape);
   glutDisplayFunc(display);
-	glutIdleFunc(spinCube);
 	glutKeyboardFunc(keyboard);
 	glutTimerFunc(500, updateDisco, 0);
 	glEnable(GL_DEPTH_TEST); /* Enable hidden--surface--removal */

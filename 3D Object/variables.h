@@ -35,6 +35,7 @@ void rotate();
 void colorcube(void);
 void display(void);
 void spincube();
+void discoitems();
 void updatedisplay(int value);
 void displayFPS(int value);
 void drawText(float x, float y, char *text);
