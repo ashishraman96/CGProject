@@ -1,13 +1,8 @@
 #include <stdlib.h>
 #include <GL/glut.h>
+#include "variables.h"
 
-GLfloat vertices[][3] = {{0.0,-1.0,-1.0}, {0.0,0.75,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}};
-
-GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
-
-float speed = 0.0;
-
-bool flag = false; //to check if rotation has started or not
+using namespace std;
 
 void triangle(int a, int b, int c) {
 	glBegin(GL_POLYGON);
@@ -27,8 +22,7 @@ void colorcube(void) {
 	triangle(2,3,1);
 }
 
-static GLfloat theta[] = {0.0,0.0,0.0};
-static GLint axis = 2;
+
 
 void display(void) {
 
@@ -100,8 +94,8 @@ int main(int argc, char **argv) {
 /* need both double buffering and z buffer */
 
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(500, 500);
-  glutCreateWindow("Rotating a Color Cube");
+  glutInitWindowSize(WINDOW_HEIGHT, WINDOW_WIDTH);
+  glutCreateWindow(WINDOW_TITLE);
   glutReshapeFunc(myReshape);
   glutDisplayFunc(display);
 	glutIdleFunc(spinCube);
