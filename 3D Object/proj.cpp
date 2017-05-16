@@ -1,19 +1,14 @@
 #include "variables.h"
 
-
-float c = 0.0;
-
 void instructions() {
 	cout << "                             *****INSTRUCTIONS*****                      " << endl;
 	cout << "--------------------------------------------------------------------------------" << endl;
-	//cout << " m : Mesh-View ON/OFF" << endl;
 	cout << "F/f : FPS Display ON/OFF" << endl;
-	cout << "-space- : Dance ON/OFF" << endl;
 	cout << "W/w : Fly ON/OFF" << endl;
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
-	cout << "+/-: Increase/Decrease speed of Rotation" << endl;
+	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
 	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
@@ -21,12 +16,12 @@ void instructions() {
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
 }
 
-float timeElapsed2 = 0;
-void timer2(int value) {
+float timeElapsed = 0;
+void timer(int value) {
 	if (whoosh) {
-		timeElapsed2 += 0.02;
+		timeElapsed += 0.02;
 		glutPostRedisplay();
-		glutTimerFunc(10, timer2, 0);
+		glutTimerFunc(10, timer, 0);
 	}
 }
 
@@ -68,6 +63,14 @@ void spinCube() {
 	glutPostRedisplay();
 }
 
+void rotate() {
+	glRotatef(theta[0], 1.0, 0.0, 0.0);
+	glRotatef(theta[1], 0.0, 1.0, 0.0);
+	glRotatef(theta[2], 0.0, 0.0, 1.0);
+
+	colorcube();
+}
+
 void discoitems() {
 
 	glPushMatrix();
@@ -105,66 +108,6 @@ void discoitems() {
 	glScalef(0.19,0.19,0.19);
 	rotate();
 	glPopMatrix();
-}
-
-void display(void) {
-
-	//Used to make the Model 'Wiggle'
-	//float sinA, sinB, sinC;
-	//Used for the Model the 'Fly'
-	float sinX, sinY;
-
-	if (whoosh) {
-		sinX = tan(timeElapsed2 - 1.5);
-		sinY = sin(timeElapsed2 + 1.5);
-	}
-
-	/*if (dancing) {
-		sinA = 0.2 * sin(timeElapsed - 1.5);
-		sinB = 0.2 * sin(timeElapsed - 0.5);
-		sinC = 0.2 * sin(timeElapsed + 0.5);
-	}
-	else {
-		sinA = 0;
-		sinB = 0;
-		sinC = 0;
-	}*/
-
-	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	 glEnable(GL_BLEND);
-	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	 glMatrixMode(GL_MODELVIEW);
-	 glLoadIdentity();
-	 glPushMatrix();
-	 if (whoosh) {
- 		if (zoomer > 1) {
- 			glTranslatef(0, sinY, zoomer);
- 		}
- 		else if (zoomer < 1) {
- 			glTranslatef(0, sinY, -zoomer);
- 		}
- 		else
- 			glTranslatef(sinX, sinY, 0);
- 		//glPushMatrix();
-	}
-	rotate();
-	glPopMatrix();
-	if (whoosh)
-		glPopMatrix();
-	if(discoMode) {
-		discoitems();
-	}
-	 checkForText();
-	 glFlush();
-	 glutSwapBuffers();
-}
-
-void rotate() {
-	glRotatef(theta[0], 1.0, 0.0, 0.0);
-	glRotatef(theta[1], 0.0, 1.0, 0.0);
-	glRotatef(theta[2], 0.0, 0.0, 1.0);
-
-	colorcube();
 }
 
 void updatedisplay(int value) {
@@ -217,49 +160,49 @@ void drawText(float x, float y, char *text) {
 void checkForText() {
 	if (inAppDisplay) {
 		if (discoMode)	{
-		drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
-		drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : ON");
+			drawText(-5 * asp_rat, 2.7 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.7 * asp_rat, "Disco-Mode : ON");
 		}
 		else {
-			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : OFF");
+			drawText(-5* asp_rat, 2.7 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.7 * asp_rat, "Disco-Mode : OFF");
 		}
 
 		if (whoosh)	{
-			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : ON");
+			drawText(-5 * asp_rat, 2.5 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.5 * asp_rat, "Fly-Mode : ON");
 		}
 		else {
-			drawText(-2 * asp_rat, 1.7 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.7 * asp_rat, "Fly-Mode : OFF");
+			drawText(-5 * asp_rat, 2.5 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.5 * asp_rat, "Fly-Mode : OFF");
 		}
 
-		/*if (meshview) {
-			drawText(-2 * asp_rat, 1.6 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.6 * asp_rat, "Meshview : ON");
+		if(lighting) {
+			drawText(-5 * asp_rat, 2.3 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.3 * asp_rat, "Lighting: ON");
 		}
 		else {
-			drawText(-2 * asp_rat, 1.6 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.6 * asp_rat, "Meshview : OFF");
-		}*/
+			drawText(-5 * asp_rat, 2.3 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.3 * asp_rat, "Lighting: OFF");
+		}
 
 		if (rotation) {
-			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.5 * asp_rat, "Rotation-Mode : ON");
+			drawText(-5 * asp_rat, 2.1 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.1 * asp_rat, "Rotation-Mode : ON");
 		}
 		else {
-			drawText(-2 * asp_rat, 1.5 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.5 * asp_rat, "Rotation-Mode : OFF");
+			drawText(-5 * asp_rat, 2.1 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 2.1 * asp_rat, "Rotation-Mode : OFF");
 		}
 
 		if (fpsMode) {
-			drawText(-2 * asp_rat, 1.4 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : ON (Check Console)");
+			drawText(-5 * asp_rat, 1.9 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 1.9 * asp_rat, "FPS : ON (Check Console)");
 		}
 		else
 		{
-			drawText(-2 * asp_rat, 1.4 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.4 * asp_rat, "FPS : OFF");
+			drawText(-5 * asp_rat, 1.9 * asp_rat, "                                       ");
+			drawText(-5 * asp_rat, 1.9 * asp_rat, "FPS : OFF");
 		}
 	}
 }
@@ -283,6 +226,76 @@ void updateDisco(int value) {
 	}
 	else
 		glClearColor(1, 1, 1, 1);
+}
+
+void display(void) {
+
+	if(lighting) {
+		GLfloat mat_ambient[] = {0.1f, 0.3f, 0.9f, 0.0f}; // gray
+		GLfloat mat_diffuse[] = {.5f, .5f, .5f, 1.0f};
+		GLfloat mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat mat_shininess[] = {50.0f};
+
+		glClearColor(0.0,0.0,0.0,0.0);
+
+		glEnable (GL_LIGHTING);
+		glEnable (GL_LIGHT0);
+		glShadeModel (GL_SMOOTH);
+		glEnable (GL_NORMALIZE);
+
+		glMaterialfv (GL_FRONT, GL_AMBIENT, mat_ambient);
+		glMaterialfv (GL_FRONT, GL_DIFFUSE, mat_diffuse);
+		glMaterialfv (GL_FRONT, GL_SPECULAR, mat_specular);
+		glMaterialfv (GL_FRONT, GL_SHININESS, mat_shininess);
+
+		//set the light source properties
+
+		GLfloat lightIntensity[] = {0.7f, 0.7f, 0.7f, 1.0f};
+		GLfloat light_position[] = {1.0f, 3.0f, 2.0f, 1.0f};
+		glLightfv (GL_LIGHT0, GL_POSITION, light_position);
+		glLightfv (GL_LIGHT0, GL_DIFFUSE, lightIntensity);
+	}
+	else {
+		glClearColor(1.0,1.0,1.0,1.0);
+		glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHT0);
+		glDisable(GL_NORMALIZE);
+	}
+	float sinX, sinY;
+
+	if (whoosh) {
+		sinX = tan(timeElapsed - 1.5);
+		sinY = sin(timeElapsed + 1.5);
+	}
+
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+	glPushMatrix();
+	if (whoosh) {
+	 if (zoomer > 1) {
+		 glTranslatef(0, sinY, zoomer);
+	 }
+	 else if (zoomer < 1) {
+		 glTranslatef(0, sinY, -zoomer);
+	 }
+	 else
+		 glTranslatef(sinX, sinY, 0);
+	 //glPushMatrix();
+ }
+ rotate();
+ glPopMatrix();
+ if (whoosh)
+	 glPopMatrix();
+ if(discoMode) {
+	 discoitems();
+ }
+	checkForText();
+	glFlush();
+	glutSwapBuffers();
+
 }
 
 void keyboard(unsigned char btn, int x, int y) {
@@ -379,15 +392,22 @@ void keyboard(unsigned char btn, int x, int y) {
 		updateDisco(0);
 	}
 
-
 	if (btn == 'w' || btn == 'W') {
 		whoosh = !whoosh;
-		timeElapsed2 = 0;
+		timeElapsed = 0;
 		if (whoosh)
 			cout << endl << "Fly Mode ON!" << endl;
 		else
 			cout << endl << "Fly Mode OFF!" << endl;
-		timer2(0);
+		timer(0);
+	}
+
+	if (btn == 'l' || btn == 'L') {
+		lighting = !lighting;
+		if (lighting)
+			cout << endl << "Lighting ON!" << endl;
+		else
+			cout << endl << "Lighting OFF!" << endl;
 	}
 
 	if(btn == 27)
@@ -405,14 +425,41 @@ void myReshape(int w, int h) {
   glLoadIdentity();
   if (w <= h) {
   	glOrtho(-2.0, 2.0, -2.0 * (GLfloat) h / (GLfloat) w, 2.0 * (GLfloat) h / (GLfloat) w, -10.0, 10.0);
-		asp_rat = (float)w/(float)h;
+		//asp_rat = (float)w/(float)h;
 	}
   else {
     glOrtho(-2.0 * (GLfloat) w / (GLfloat) h, 2.0 * (GLfloat) w / (GLfloat) h, -2.0, 2.0, -10.0, 10.0);
-		asp_rat = (float)h/(float)w;
+		//asp_rat = (float)h/(float)w;
 	}
 
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void main_menu(int index) {
+  switch (index) {
+		case 1:
+			lighting = !lighting;
+			if (lighting)
+				cout << endl << "Lighting ON!" << endl;
+			else
+				cout << endl << "Lighting OFF!" << endl;
+			break;
+  }
+}
+
+void menuInit() {
+	int subMenu = glutCreateMenu(main_menu);
+	glutAddMenuEntry("10",2);
+	glutAddMenuEntry("20",3);
+	glutAddMenuEntry("30",4);
+	glutAddMenuEntry("40",5);
+
+
+	c_menu=glutCreateMenu(main_menu);
+	glutAddSubMenu("Objects",subMenu);
+	glutAddMenuEntry("Lighting",1);
+	//glutAddMenuEntry("Comet",2);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 int main(int argc, char **argv) {
@@ -426,10 +473,11 @@ int main(int argc, char **argv) {
 	displayFPS(0);
 	glutIdleFunc(spinCube);
   glutReshapeFunc(myReshape);
-	glutKeyboardFunc(keyboard);
   glutDisplayFunc(display);
+	glutKeyboardFunc(keyboard);
 	glutTimerFunc(500, updateDisco, 0);
 	glEnable(GL_DEPTH_TEST); /* Enable hidden--surface--removal */
+	menuInit();
   glutMainLoop();
   return 0;
 }
