@@ -37,7 +37,16 @@ bool discoMode = false;
 bool whoosh = false;
 bool cube = false;
 bool pyramid = true;
+bool cone = false;
+bool torus = false;
+bool sphere = false;
+bool dodecahedron = false;
+bool octahedron = false;
+bool tetrahedron = false;
+bool icosahedron = false;
 bool lighting = false;
+bool flyside = true;
+bool flyup = false;
 //Variables used for FPS and FPS calculation
 float fps;
 int frameCount = 0;
@@ -50,7 +59,7 @@ void timer2(int value);
 void triangle(int a, int b, int c);
 void rotate();
 void colorTriangle(void);
-void colorCUbe(void);
+void colorCube(void);
 void polygon(int a, int b, int c, int d);
 void display(void);
 void spincube();
@@ -62,3 +71,15 @@ void checkForText(void);
 void updateDisco(int value);
 void keyboard(unsigned char btn, int x, int y);
 void myReshape(int w, int h);
+
+void initializer() {
+  pyramid = false;
+  cube = false;
+  cone = false;
+  torus = false;
+  sphere = false;
+  dodecahedron = false;
+  octahedron = false;
+  tetrahedron = false;
+  icosahedron = false;
+}
