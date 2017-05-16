@@ -1,76 +1,85 @@
-/* CONSTANT VALUES */
-const int WINDOW_WIDTH = 500;
-const int WINDOW_HEIGHT = 500;
-const char* WINDOW_TITLE = "Wiggle Wiggle Wiggle";
+#include <stdlib.h>
+#include <stdio.h>
+#include <GL/glut.h>
+#include <string.h>
+#include <math.h>
 
-/* GLOBAL VARIABLES (USED TO STORE TOGGLE VALUES) */
-int color = 1;								//To switch between color of 'I'
-int toggle = 0;								//To switch between disco color lighting
-float angle = 0.0;						//Used for the rotation of the model
-float zoomer = 1.0;						//Used to Zoom in and Out for the Model (Tells us the value of the z Axis the model is currently translated at)
-float speedOfRotation;					//Stores the current spped of rotation for the model
-float whoosh_factor = 10;			//A factor reponsible for the flying animation
-float asp_rat;						// variable used to store the aspect ratio of the window
+#include<iostream>
+using namespace std;
 
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
+const char* WINDOW_TITLE = "Wiggle Wiggle";
+
+int c_menu;
+
+GLfloat trivertices[][3] = {{0.0,1.0,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}, {1.0,-1.0,-1.0}, {-1.0,-1.0,-1.0}};
+GLfloat polyvertices[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
+	{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+	{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+
+GLfloat colors[][3] = {{0.3,0.1,0.5},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {0.7,0.8,0.2}};
+
+static GLfloat theta[] = {0.0,0.0,0.0};
+static GLint axis = 1;
+
+float asp_rat = 1080.0/1920.0;
+float speed = 0.0;
+float zoomer = 1.0;
+int toggle = 0;
+float whooshFactor = 10;
+
+bool meshview = false;
+bool rotation = false; //to check if rotation has started or not
+bool fpsMode = false;
+bool inAppDisplay = false;
+bool discoMode = false;
+bool whoosh = false;
+bool cube = false;
+bool pyramid = true;
+bool cone = false;
+bool torus = false;
+bool sphere = false;
+bool dodecahedron = false;
+bool octahedron = false;
+bool tetrahedron = false;
+bool icosahedron = false;
+bool lighting = false;
+bool flyside = true;
+bool flyup = false;
 //Variables used for FPS and FPS calculation
 float fps;
 int frameCount = 0;
 int currentTime = 0;
 int previousTime = 0;
 
-
-static bool meshview = false;			//Mesh-View Originally OFF || Variable used for Mesh-View Toggle
-static bool disco_mode = false;			//Disco-Mode Originally OFF || Variable used for Disco-Mode Toggle
-static bool fps_mode = false;			//FPS Originally OFF || Variable used for FPS Toggle
-static bool dancing = false;			//Dance Originally OFF || Variable used to Make the 'I' dance
-static bool rotate_mode = false;				//Rotate Originally OFF || Vairiable used to make the model rotate
-static bool whoosh = false;						//Whoosh Originally OFF || Variable used to make the model fly
-static bool in_app_display = false;				//In App Display Originally OFF || Used to display/draw the current animation info on the screen
-
-/* FUNCTION LIST */
-
-void instructions(void);			//Display "commands" on the console
-void updatedisplay(int value);
-void drawModel(void);
-void updateDisco(int value);
-void checkForText(void);
-void keyboard(unsigned char c, int x, int y);
-void updateRotation(int value);							//Updates the Rotation of the model (right & left direction)
-void displayClearMessage(int value);
-void displayFPS(int value);						//Used to print FPS on the Console
+void instructions(void);
 void timer(int value);
 void timer2(int value);
-void resize(int width, int height);
+void triangle(int a, int b, int c);
+void rotate();
+void colorTriangle(void);
+void colorCube(void);
+void polygon(int a, int b, int c, int d);
+void display(void);
+void spincube();
+void discoitems();
+void updatedisplay(int value);
+void displayFPS(int value);
+void drawText(float x, float y, char *text);
+void checkForText(void);
+void updateDisco(int value);
+void keyboard(unsigned char btn, int x, int y);
+void myReshape(int w, int h);
 
-
-
-/**
-* Function: drawText()
-*
-* Description: Used to display graphical text on the GLUT window. This helps the user know which function is activated
-*			   and also is aethetically pleasing.
-*
-* Parameters: float x :: used for the x-coordinate position of the text starting point
-*			  float y :: used for the y-coordinate position of the text starting point
-*			  char *text :: Used to get the string/text to print on the screen
-*
-*/
-void drawText(float x, float y, char *text)
-{
-	int length = strlen(text);		//Grabs the length of the text
-
-	glColor3f(0, 0, 0);
-
-	//Position to draw the text
-	glRasterPos2f(x, y);
-
-	glDisable(GL_TEXTURE);
-	glDisable(GL_TEXTURE_2D);
-	for (int i = 0; i < length; i++)
-	{
-		//2nd parameter is sent as integers as the function needs the ASCII codes
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
-	}
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_TEXTURE);
+void initializer() {
+  pyramid = false;
+  cube = false;
+  cone = false;
+  torus = false;
+  sphere = false;
+  dodecahedron = false;
+  octahedron = false;
+  tetrahedron = false;
+  icosahedron = false;
 }
