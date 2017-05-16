@@ -11,8 +11,8 @@ const int WINDOW_WIDTH = 1920;
 const int WINDOW_HEIGHT = 1080;
 const char* WINDOW_TITLE = "Wiggle Wiggle";
 
-GLfloat vertices[][3] = {{0.0,-1.0,-1.0}, {0.0,0.65,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}};
-GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
+GLfloat vertices[][3] = {{0.0,1.0,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}, {1.0,-1.0,-1.0}, {-1.0,-1.0,-1.0}};
+GLfloat colors[][3] = {{0.3,0.1,0.5},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
 
 static GLfloat theta[] = {0.0,0.0,0.0};
 static GLint axis = 1;
@@ -28,9 +28,9 @@ bool rotation = false; //to check if rotation has started or not
 bool fpsMode = false;
 bool inAppDisplay = false;
 bool discoMode = false;
-bool dancing = false;
 bool whoosh = false;
-
+bool cube = false;
+bool prism = false;
 //Variables used for FPS and FPS calculation
 float fps;
 int frameCount = 0;

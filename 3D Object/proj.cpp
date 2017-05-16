@@ -1,12 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <GL/glut.h>
-#include <string.h>
-#include <math.h>
 #include "variables.h"
 
-#include<iostream>
-using namespace std;
 
 float c = 0.0;
 
@@ -20,7 +13,7 @@ void instructions() {
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
-	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
+	cout << "+/-: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
 	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
@@ -28,26 +21,17 @@ void instructions() {
 	cout << "--------------------------------------------------------------------------------" << endl << endl;
 }
 
-float timeElapsed = 0;
-void timer(int value) {
-	if (dancing) {
-		timeElapsed += 0.2;
-		glutPostRedisplay();
-		glutTimerFunc(50, timer, 0);
-	}
-}
-
 float timeElapsed2 = 0;
 void timer2(int value) {
 	if (whoosh) {
-		timeElapsed2 += 0.05;
+		timeElapsed2 += 0.02;
 		glutPostRedisplay();
 		glutTimerFunc(10, timer2, 0);
 	}
 }
 
 void triangle(int a, int b, int c) {
-	glBegin(GL_POLYGON);
+	glBegin(GL_TRIANGLES);
 	glColor3fv(colors[a]);
 	glVertex3fv(vertices[a]);
 	glColor3fv(colors[b]);
@@ -59,14 +43,23 @@ void triangle(int a, int b, int c) {
 
 void colorcube(void) {
 	glScalef(zoomer, zoomer, zoomer);
-	triangle(0,2,3);
-	triangle(0,2,1);
-	triangle(3,0,1);
-	triangle(2,3,1);
+	triangle(0,1,2); //front
+	triangle(0,2,3); //right
+	triangle(0,3,4); //back
+	triangle(0,4,1); //left
+	glBegin(GL_POLYGON);
+	glColor3fv(colors[0]);
+	glVertex3fv(vertices[1]);
+	glColor3fv(colors[1]);
+	glVertex3fv(vertices[2]);
+	glColor3fv(colors[2]);
+	glVertex3fv(vertices[3]);
+	glColor3fv(colors[3]);
+	glVertex3fv(vertices[4]);
+	glEnd();
 }
 
 void spinCube() {
-
 	theta[axis] += speed;
 	if( theta[axis] > 360.0 )
 		theta[axis] -= 360.0;
@@ -76,11 +69,6 @@ void spinCube() {
 }
 
 void discoitems() {
-	glPushMatrix();
-	glTranslatef(-0.7,0.7,0.1);
-	glScalef(0.2,0.2,0.2);
-	rotate();
-	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-1.5,0.3,-0.1);
@@ -122,16 +110,16 @@ void discoitems() {
 void display(void) {
 
 	//Used to make the Model 'Wiggle'
-	float sinA, sinB, sinC;
+	//float sinA, sinB, sinC;
 	//Used for the Model the 'Fly'
 	float sinX, sinY;
 
 	if (whoosh) {
-		sinX = sin(timeElapsed2 - 1.5);
+		sinX = tan(timeElapsed2 - 1.5);
 		sinY = sin(timeElapsed2 + 1.5);
 	}
 
-	if (dancing) {
+	/*if (dancing) {
 		sinA = 0.2 * sin(timeElapsed - 1.5);
 		sinB = 0.2 * sin(timeElapsed - 0.5);
 		sinC = 0.2 * sin(timeElapsed + 0.5);
@@ -140,7 +128,7 @@ void display(void) {
 		sinA = 0;
 		sinB = 0;
 		sinC = 0;
-	}
+	}*/
 
 	 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 glEnable(GL_BLEND);
@@ -150,10 +138,10 @@ void display(void) {
 	 glPushMatrix();
 	 if (whoosh) {
  		if (zoomer > 1) {
- 			glTranslatef(sinX, sinY, zoomer);
+ 			glTranslatef(0, sinY, zoomer);
  		}
  		else if (zoomer < 1) {
- 			glTranslatef(sinX, sinY, -zoomer);
+ 			glTranslatef(0, sinY, -zoomer);
  		}
  		else
  			glTranslatef(sinX, sinY, 0);
@@ -178,7 +166,6 @@ void rotate() {
 
 	colorcube();
 }
-
 
 void updatedisplay(int value) {
 	//To update the display repeatedly
@@ -229,18 +216,9 @@ void drawText(float x, float y, char *text) {
 
 void checkForText() {
 	if (inAppDisplay) {
-		if (dancing) {
-			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.9 *asp_rat, "Dancing-Mode : ON");
-		}
-		else {
-			drawText(-2 * asp_rat, 1.9 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.9 * asp_rat, "Dancing-Mode : OFF");
-		}
-
 		if (discoMode)	{
-			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
-			drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : ON");
+		drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
+		drawText(-2 * asp_rat, 1.8 * asp_rat, "Disco-Mode : ON");
 		}
 		else {
 			drawText(-2 * asp_rat, 1.8 * asp_rat, "                                       ");
@@ -322,7 +300,7 @@ void keyboard(unsigned char btn, int x, int y) {
 		}
 	}
 
-	if(btn == '1') {
+	if(btn == '+') {
 		if(rotation) {
 			speed += 1.0;
 			cout << "Speed Increased" << endl;
@@ -330,7 +308,7 @@ void keyboard(unsigned char btn, int x, int y) {
 	}
 
 
-	if(btn == '2') {
+	if(btn == '-') {
 		if(rotation) {
 			speed -= 1.0;
 			cout << "Speed Decreased" << endl;
@@ -401,15 +379,6 @@ void keyboard(unsigned char btn, int x, int y) {
 		updateDisco(0);
 	}
 
-	if (btn == ' ') {
-		dancing = !dancing;
-		timeElapsed = 0;
-		if(dancing)
-			cout << endl << "Dancing ON!" << endl;
-		else
-			cout << endl << "Dancing OFF!" << endl;
-		timer(0);
-	}
 
 	if (btn == 'w' || btn == 'W') {
 		whoosh = !whoosh;
@@ -457,8 +426,8 @@ int main(int argc, char **argv) {
 	displayFPS(0);
 	glutIdleFunc(spinCube);
   glutReshapeFunc(myReshape);
-  glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
+  glutDisplayFunc(display);
 	glutTimerFunc(500, updateDisco, 0);
 	glEnable(GL_DEPTH_TEST); /* Enable hidden--surface--removal */
   glutMainLoop();
