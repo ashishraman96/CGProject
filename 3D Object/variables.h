@@ -13,8 +13,12 @@ const char* WINDOW_TITLE = "Wiggle Wiggle";
 
 int c_menu;
 
-GLfloat vertices[][3] = {{0.0,1.0,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}, {1.0,-1.0,-1.0}, {-1.0,-1.0,-1.0}};
-GLfloat colors[][3] = {{0.3,0.1,0.5},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
+GLfloat trivertices[][3] = {{0.0,1.0,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}, {1.0,-1.0,-1.0}, {-1.0,-1.0,-1.0}};
+GLfloat polyvertices[][3] = {{-1.0,-1.0,-1.0},{1.0,-1.0,-1.0},
+	{1.0,1.0,-1.0}, {-1.0,1.0,-1.0}, {-1.0,-1.0,1.0},
+	{1.0,-1.0,1.0}, {1.0,1.0,1.0}, {-1.0,1.0,1.0}};
+
+GLfloat colors[][3] = {{0.3,0.1,0.5},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {0.7,0.8,0.2}};
 
 static GLfloat theta[] = {0.0,0.0,0.0};
 static GLint axis = 1;
@@ -32,7 +36,7 @@ bool inAppDisplay = false;
 bool discoMode = false;
 bool whoosh = false;
 bool cube = false;
-bool prism = false;
+bool pyramid = true;
 bool lighting = false;
 //Variables used for FPS and FPS calculation
 float fps;
@@ -45,7 +49,9 @@ void timer(int value);
 void timer2(int value);
 void triangle(int a, int b, int c);
 void rotate();
-void colorcube(void);
+void colorTriangle(void);
+void colorCUbe(void);
+void polygon(int a, int b, int c, int d);
 void display(void);
 void spincube();
 void discoitems();

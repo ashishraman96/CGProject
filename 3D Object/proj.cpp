@@ -28,15 +28,15 @@ void timer(int value) {
 void triangle(int a, int b, int c) {
 	glBegin(GL_TRIANGLES);
 	glColor3fv(colors[a]);
-	glVertex3fv(vertices[a]);
+	glVertex3fv(trivertices[a]);
 	glColor3fv(colors[b]);
-	glVertex3fv(vertices[b]);
+	glVertex3fv(trivertices[b]);
 	glColor3fv(colors[c]);
-	glVertex3fv(vertices[c]);
+	glVertex3fv(trivertices[c]);
 	glEnd();
 }
 
-void colorcube(void) {
+void colorTriangle(void) {
 	glScalef(zoomer, zoomer, zoomer);
 	triangle(0,1,2); //front
 	triangle(0,2,3); //right
@@ -44,14 +44,37 @@ void colorcube(void) {
 	triangle(0,4,1); //left
 	glBegin(GL_POLYGON);
 	glColor3fv(colors[0]);
-	glVertex3fv(vertices[1]);
+	glVertex3fv(trivertices[1]);
 	glColor3fv(colors[1]);
-	glVertex3fv(vertices[2]);
+	glVertex3fv(trivertices[2]);
 	glColor3fv(colors[2]);
-	glVertex3fv(vertices[3]);
+	glVertex3fv(trivertices[3]);
 	glColor3fv(colors[3]);
-	glVertex3fv(vertices[4]);
+	glVertex3fv(trivertices[4]);
 	glEnd();
+}
+
+void polygon(int a, int b, int c , int d) {
+ 	glBegin(GL_POLYGON);
+	glColor3fv(colors[a]);
+	glVertex3fv(polyvertices[a]);
+	glColor3fv(colors[b]);
+	glVertex3fv(polyvertices[b]);
+	glColor3fv(colors[c]);
+	glVertex3fv(polyvertices[c]);
+	glColor3fv(colors[d]);
+	glVertex3fv(polyvertices[d]);
+	glEnd();
+}
+
+void colorCube(void) {
+	glScalef(zoomer, zoomer, zoomer);
+	polygon(0,3,2,1);
+	polygon(2,3,7,6);
+	polygon(0,4,7,3);
+	polygon(1,2,6,5);
+	polygon(4,5,6,7);
+	polygon(0,1,5,4);
 }
 
 void spinCube() {
@@ -68,7 +91,11 @@ void rotate() {
 	glRotatef(theta[1], 0.0, 1.0, 0.0);
 	glRotatef(theta[2], 0.0, 0.0, 1.0);
 
-	colorcube();
+	if(pyramid)
+		colorTriangle();
+
+	if(cube)
+		colorCube();
 }
 
 void discoitems() {
@@ -220,7 +247,6 @@ void updateDisco(int value) {
 			glClearColor(0.0, 61.0, 255.0, 0.0);
 			toggle = 0;
 		}
-	//cout << toggle << endl;
 		glutPostRedisplay();
 		glutTimerFunc(250, updateDisco, 0);
 	}
@@ -256,15 +282,15 @@ void display(void) {
 		glLightfv (GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 	}
 	else {
-		glClearColor(1.0,1.0,1.0,1.0);
 		glDisable(GL_LIGHTING);
 		glDisable(GL_LIGHT0);
 		glDisable(GL_NORMALIZE);
 	}
-	float sinX, sinY;
+
+	float tanX, sinY;
 
 	if (whoosh) {
-		sinX = tan(timeElapsed - 1.5);
+		tanX = tan(timeElapsed - 1.5);
 		sinY = sin(timeElapsed + 1.5);
 	}
 
@@ -276,14 +302,13 @@ void display(void) {
 	glPushMatrix();
 	if (whoosh) {
 	 if (zoomer > 1) {
-		 glTranslatef(0, sinY, zoomer);
+		 glTranslatef(tanX, sinY, zoomer);
 	 }
 	 else if (zoomer < 1) {
-		 glTranslatef(0, sinY, -zoomer);
+		 glTranslatef(tanX, sinY, -zoomer);
 	 }
 	 else
-		 glTranslatef(sinX, sinY, 0);
-	 //glPushMatrix();
+		 glTranslatef(tanX, sinY, 0);
  }
  rotate();
  glPopMatrix();
@@ -438,6 +463,20 @@ void myReshape(int w, int h) {
 void main_menu(int index) {
   switch (index) {
 		case 1:
+			if(!pyramid) {
+				pyramid = true;
+				cube = false;
+				cout << endl << "Pyramid!" << endl;
+			}
+			break;
+		case 2:
+			if(!cube) {
+				cube = true;
+				pyramid = false;
+				cout << endl << "Pyramid!" << endl;
+			}
+			break;
+		case 9:
 			lighting = !lighting;
 			if (lighting)
 				cout << endl << "Lighting ON!" << endl;
@@ -449,15 +488,15 @@ void main_menu(int index) {
 
 void menuInit() {
 	int subMenu = glutCreateMenu(main_menu);
-	glutAddMenuEntry("10",2);
-	glutAddMenuEntry("20",3);
-	glutAddMenuEntry("30",4);
-	glutAddMenuEntry("40",5);
+	glutAddMenuEntry("Pyramid",1);
+	glutAddMenuEntry("Cube",2);
+	glutAddMenuEntry("30",3);
+	glutAddMenuEntry("40",4);
 
 
 	c_menu=glutCreateMenu(main_menu);
 	glutAddSubMenu("Objects",subMenu);
-	glutAddMenuEntry("Lighting",1);
+	glutAddMenuEntry("Lighting",9);
 	//glutAddMenuEntry("Comet",2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
