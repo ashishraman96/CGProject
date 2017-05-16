@@ -1,8 +1,17 @@
-const int WINDOW_WIDTH = 500;
-const int WINDOW_HEIGHT = 500;
+#include <stdlib.h>
+#include <stdio.h>
+#include <GL/glut.h>
+#include <string.h>
+#include <math.h>
+
+#include<iostream>
+using namespace std;
+
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
 const char* WINDOW_TITLE = "Wiggle Wiggle";
 
-GLfloat vertices[][3] = {{0.0,-1.0,-1.0}, {0.0,0.75,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}};
+GLfloat vertices[][3] = {{0.0,-1.0,-1.0}, {0.0,0.65,0.0}, {-1.0,-1.0,1.0}, {1.0,-1.0,1.0}};
 GLfloat colors[][3] = {{0.0,0.0,0.0},{1.0,0.0,0.0},	{0.0,1.0,0.0}, {0.0,0.0,1.0}, {1.0,1.0,1.0}, };
 
 static GLfloat theta[] = {0.0,0.0,0.0};
@@ -14,6 +23,7 @@ float zoomer = 1.0;
 int toggle = 0;
 float whooshFactor = 10;
 
+bool meshview = false;
 bool rotation = false; //to check if rotation has started or not
 bool fpsMode = false;
 bool inAppDisplay = false;
