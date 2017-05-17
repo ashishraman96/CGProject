@@ -8,7 +8,7 @@ void instructions() {
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
-	cout << "1/2: Increase/Decrease speed of Rotation" << endl;
+	cout << "+/-: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
 	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
