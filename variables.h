@@ -25,7 +25,7 @@ static GLint axis = 1;
 
 float asp_rat = 1080.0/1920.0;
 float speed = 0.0;
-float zoomer = 1.0;
+float zoomer = 0.85;
 int toggle = 0;
 float whooshFactor = 10;
 

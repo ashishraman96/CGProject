@@ -321,13 +321,12 @@ void updateDisco(int value) {
 void display(void) {
 
 	float tanX, sinY;
- if(discoMode)
- {
+ if(discoMode) {
+	 sinA = 0.2 * sin(timeElapsed1 - 1.5);
+		sinB = 0.2 * sin(timeElapsed1 - 0.5);
+		sinC = 0.2 * sin(timeElapsed1 + 0.5);
+	}
 
-		 sinA = 0.2 * sin(timeElapsed1 - 1.5);
-		 sinB = 0.2 * sin(timeElapsed1 - 0.5);
-		 sinC = 0.2 * sin(timeElapsed1 + 0.5);
- }
 	if (whoosh) {
 		if(flyside) {
 			tanX = tan(timeElapsed - 1.5);
@@ -375,12 +374,14 @@ void display(void) {
 		if(torus) {
 			rotate();
 			glScalef(zoomer, zoomer, zoomer);
+			glColor3f(0.6,0.6,0.6);
 			glLineWidth(2.0);
 			glutWireTorus(0.3,1.0,20,20);
   	}
 		if(sphere) {
 			rotate();
 			glScalef(zoomer, zoomer, zoomer);
+			glColor3f(0.9,0.1,0.4);
 			glLineWidth(2.0);
 			glutWireSphere(1.0,20,20);
 		}
