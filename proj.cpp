@@ -167,7 +167,7 @@ void discoitems() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(1.7,1.3,-0.1);
+	glTranslatef(-1.7,1.4,-0.1);
 	glScalef(-0.2,-0.2,-0.2);
 	rotate();
 	colorTriangle();
@@ -181,7 +181,7 @@ void discoitems() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(1.5,-0.9,0.4);
+	glTranslatef(1.7,-1.0,0.4);
 	glScalef(0.19,0.19,0.19);
 	rotate();
 	glutWireIcosahedron();
