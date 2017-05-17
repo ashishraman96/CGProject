@@ -1,4 +1,5 @@
 #include "variables.h"
+float sinA, sinB, sinC;
 
 void instructions() {
 	cout << "                             *****INSTRUCTIONS*****                      " << endl;
@@ -8,7 +9,7 @@ void instructions() {
 	cout << "D/d : Disco Mode ON/OFF" << endl;
 	cout << "R/r: Rotation Mode ON/OFF" << endl;
 	cout << "x/y/z: Change Axis of Rotation" << endl;
-	cout << "+/-: Increase/Decrease speed of Rotation" << endl;
+	cout << "+/: Increase/Decrease speed of Rotation" << endl;
 	cout << "v/b: Zoom In / Zoom Out" << endl;
 	cout << "O/o : Display In-App Function States" << endl;
 	cout << " c : Clear Console Screen" << endl;
@@ -17,11 +18,21 @@ void instructions() {
 }
 
 float timeElapsed = 0;
+
 void timer(int value) {
 	if (whoosh) {
 		timeElapsed += 0.02;
 		glutPostRedisplay();
 		glutTimerFunc(10, timer, 0);
+	}
+}
+
+float timeElapsed1 = 0;
+void timer1(int value) {
+	if (discoMode) {
+		timeElapsed1 += 0.02;
+		glutPostRedisplay();
+		glutTimerFunc(10, timer1, 0);
 	}
 }
 
@@ -90,6 +101,46 @@ void rotate() {
 	glRotatef(theta[0], 1.0, 0.0, 0.0);
 	glRotatef(theta[1], 0.0, 1.0, 0.0);
 	glRotatef(theta[2], 0.0, 0.0, 1.0);
+
+}
+
+void I()
+{
+	//glScalef(zoomer, zoomer, zoomer);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	// ======
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(1.0,0.0,0.0);
+	glVertex3f(-0.6, 0.8 + sinA, 0);
+	glVertex3f(-0.6, 0.4 + sinA, 0);
+	glVertex3f(-0.2, 0.4 + sinB, 0);
+	glVertex3f(0.2, 0.4 + sinB, 0);
+	glVertex3f(0.6, 0.4 + sinC, 0);
+	glVertex3f(0.6, 0.8 + sinC, 0);
+	glEnd();
+	/*
+	||
+	||
+	||
+	*/
+	//glColor3f(1.0,0.0,1.0);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3f(-0.2, 0.4 + sinB, 0.0);
+	glVertex3f(0.2, 0.4 + sinB, 0);
+	glVertex3f(0.2, -0.4 + sinB, 0);
+	glVertex3f(-0.2, -0.4 + sinB, 0.0);
+	glEnd();
+	// ======
+	//glColor3f(0.0,1.0,1.0);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3f(0.6, -0.8 + sinC, 0);
+	glVertex3f(0.6, -0.4 + sinC, 0);
+	glVertex3f(0.2, -0.4 + sinB, 0);
+	glVertex3f(-0.2, -0.4 + sinB, 0);
+	glVertex3f(-0.6, -0.4 + sinA, 0);
+	glVertex3f(-0.6, -0.8 + sinA, 0);
+	glEnd();
 }
 
 void discoitems() {
@@ -99,6 +150,13 @@ void discoitems() {
 	glScalef(-0.11,-0.11,-0.11);
 	rotate();
 	glutWireSphere(1.0,20,20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-2.2, -0.9, 0.2);
+	glScalef(-0.5,-0.5,-0.5);
+	rotate();
+	I();
 	glPopMatrix();
 
 	glPushMatrix();
@@ -250,7 +308,9 @@ void updateDisco(int value) {
 		else {
 			glClearColor(0.0, 61.0, 255.0, 0.0);
 			toggle = 0;
+
 		}
+
 		glutPostRedisplay();
 		glutTimerFunc(250, updateDisco, 0);
 	}
@@ -259,8 +319,15 @@ void updateDisco(int value) {
 }
 
 void display(void) {
-	float tanX, sinY;
 
+	float tanX, sinY;
+ if(discoMode)
+ {
+
+		 sinA = 0.2 * sin(timeElapsed1 - 1.5);
+		 sinB = 0.2 * sin(timeElapsed1 - 0.5);
+		 sinC = 0.2 * sin(timeElapsed1 + 0.5);
+ }
 	if (whoosh) {
 		if(flyside) {
 			tanX = tan(timeElapsed - 1.5);
@@ -271,6 +338,7 @@ void display(void) {
 			sinY = tan(timeElapsed + 1.5);
 		}
 	}
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -443,7 +511,10 @@ void keyboard(unsigned char btn, int x, int y) {
 		else
 			cout << endl << "Disco - Mode OFF!" << endl;
 
+			dancing!=dancing;
+			timer1(0);
 		updateDisco(0);
+
 	}
 
 	if (btn == 'w' || btn == 'W') {

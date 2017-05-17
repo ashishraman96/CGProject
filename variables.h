@@ -29,6 +29,7 @@ float zoomer = 1.0;
 int toggle = 0;
 float whooshFactor = 10;
 
+bool dancing = false;
 bool meshview = false;
 bool rotation = false; //to check if rotation has started or not
 bool fpsMode = false;
@@ -55,7 +56,7 @@ int previousTime = 0;
 
 void instructions(void);
 void timer(int value);
-void timer2(int value);
+void timer1(int value);
 void triangle(int a, int b, int c);
 void rotate();
 void colorTriangle(void);
@@ -71,6 +72,7 @@ void checkForText(void);
 void updateDisco(int value);
 void keyboard(unsigned char btn, int x, int y);
 void myReshape(int w, int h);
+void I();
 
 void initializer() {
   pyramid = false;
