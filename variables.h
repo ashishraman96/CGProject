@@ -54,6 +54,8 @@ int frameCount = 0;
 int currentTime = 0;
 int previousTime = 0;
 
+int menuChanger = 2;
+
 void instructions(void);
 void timer(int value);
 void timer1(int value);

@@ -104,8 +104,7 @@ void rotate() {
 
 }
 
-void I()
-{
+void I() {
 	//glScalef(zoomer, zoomer, zoomer);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
@@ -332,6 +331,83 @@ void updateDisco(int value) {
 		glClearColor(0.0, 0.0, 0.0, 0.0);
 }
 
+void *currentfont;
+void setFont(void *font)
+{
+	currentfont=font;
+}
+void drawString(float x,float y,float z,char *string)
+{
+	char *c;
+	glRasterPos3f(x,y,z);
+	for(c=string;*c!='\0';c++)
+	{
+		glColor3f(0.0,0.0,0.0);
+		glutBitmapCharacter(currentfont,*c);
+	}
+}
+
+void frontScreen() {
+	setFont(GLUT_BITMAP_TIMES_ROMAN_24);
+	//glClearColor(0.0,0.0,0.0,1.0);/*background for cover page*/
+	discoMode = true;
+	glColor3f(0,0,0);
+	drawString(-3 * asp_rat,2.9 * asp_rat,0.0,"REVA INSTITUTE OF TECHNOLOGY AND MANAGEMENT");
+	//glColor3f(1.7,0,1);
+	drawString(-3.2 * asp_rat,2.45 * asp_rat,0.0,"DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING");
+	//glColor3f(1,0.5,0);
+	drawString(-1.4  * asp_rat,1.6 * asp_rat,0.0,"A MINI PROJECT ON");
+	//glColor3f(1,0,1);
+	drawString(-1.8 * asp_rat,1.2 * asp_rat,0.0,"ANIMATION OF 3D OBJECTS");
+	//glColor3f(1,0,0);
+	drawString(-0.35 * asp_rat,-0.5 * asp_rat,0.0,"BY:");
+	//glColor3f(1,0,0);
+	drawString(-1.95 * asp_rat,-1.0 * asp_rat,0.0,"AKASH JAMES (1RE14CS005)");
+	//glColor3f(1,0,0);
+	drawString(-2.3 * asp_rat,-1.45 * asp_rat,0.0,"ASHISH RAMAN NAYAK (1RE14CS019)");
+	//glColor3f(1,0.5,0);
+	/*drawText(980,400,0.0,"");
+	glColor3f(1,1,1);
+	drawText(930,300,0.0,"");
+	glColor3f(1,1,1);
+	drawText(930,240,0.0,"");*/
+	//glColor3f(1,0.1,1);
+	drawString(-1.5* asp_rat,-2.9 * asp_rat,0.0,"PRESS ENTER TO START");
+	glFlush();
+	glutSwapBuffers();
+}
+
+void instructionScreen() {
+	setFont(GLUT_BITMAP_TIMES_ROMAN_24);
+	//glClearColor(0.0,0.0,0.0,1.0);/*background for cover page*/
+	glClearColor(0.1,0.1,0.1,1.0);
+	glColor3f(0,0,1);
+	drawString(-1.0 * asp_rat,3.0 * asp_rat,0.0,"INSTRUCTIONS");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,2.4 * asp_rat,0.0,"F or f : FPS Display ON or OFF");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,2.0 * asp_rat,0.0,"W or w : Fly ON or OFF");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,1.6 * asp_rat,0.0,"D or d : Disco Mode ON or OFF");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,1.2 * asp_rat,0.0,"R or r: Rotation Mode ON or OFF");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,0.8 * asp_rat,0.0,"x or y or z: To change Axis of Rotation");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,0.4 * asp_rat,0.0,"+ or -: To increase or decrease speed of Rotation");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,0.0 * asp_rat,0.0,"v or b: Zoom-in or Zoom-out");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,-0.4 * asp_rat,0.0,"O or o : Display In-App Function States");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,-0.8 * asp_rat,0.0," c : Clear Console Screen");
+	glColor3f(0,0,1);
+	drawString(-3 * asp_rat,-1.2 * asp_rat,0.0," Esc: Quit");
+	glColor3f(0,0,1);
+	glFlush();
+	glutSwapBuffers();
+}
+
 void display(void) {
 
 	float tanX, sinY;
@@ -352,10 +428,14 @@ void display(void) {
 			sinY = tan(timeElapsed + 1.5);
 		}
 	}
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if(menuChanger == 2)
+		frontScreen();
+	else if(menuChanger == 1)
+		instructionScreen();
+	else {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 	glPushMatrix();
@@ -432,6 +512,7 @@ void display(void) {
 		checkForText();
 		glFlush();
 		glutSwapBuffers();
+	}
 }
 
 void keyboard(unsigned char btn, int x, int y) {
@@ -555,6 +636,11 @@ void keyboard(unsigned char btn, int x, int y) {
 	if (btn == 'c' || btn == 'C') {
 		system("clear");
 		instructions();
+	}
+
+	if(btn == 13) {
+		menuChanger--;
+		discoMode = false;
 	}
 }
 
@@ -694,7 +780,7 @@ int main(int argc, char **argv) {
 	instructions();
 	glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowSize(WINDOW_HEIGHT, WINDOW_WIDTH);
+  glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
   glutCreateWindow(WINDOW_TITLE);
 	glClearColor(0.0,0.0,0.0,0.0);
 	updatedisplay(0);
